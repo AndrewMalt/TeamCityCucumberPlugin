@@ -1,3 +1,4 @@
+@one
 Feature: First test with Cucumber
 
   Background: set preTest
