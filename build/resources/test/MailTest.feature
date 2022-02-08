@@ -1,3 +1,4 @@
+#language:en
 @one
 Feature: First test with Cucumber
 

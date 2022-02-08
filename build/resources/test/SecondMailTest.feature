@@ -4,7 +4,7 @@ Feature: Second test with Cucumber
 
   Background: set preTest
     Given say "zero zero"
-
+  @two
   Scenario Outline: try to test Hello World
     Given say "<one>"
 #    And say "<two>"

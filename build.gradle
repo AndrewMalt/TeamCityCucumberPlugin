@@ -36,9 +36,15 @@ task cucumber() {
     dependsOn assemble, testClasses
     doLast {
         javaexec {
+
+            System.properties.each {k, v ->
+                systemProperty k, v
+            }
+
             mainClass = "io.cucumber.core.cli.Main"
             classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
             args = ['--plugin', 'pretty',
+                    '--plugin', 'teamcity',
 //                    '--glue', 'gradle.cucumber',
 //                    '--glue', 'TeamCityCucumberPlugin.hooks',
 //                    '--glue', 'hooks',
