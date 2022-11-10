@@ -44,12 +44,13 @@ task cucumber() {
             mainClass = "io.cucumber.core.cli.Main"
             classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
             args = ['--plugin', 'pretty',
-                    '--plugin', 'teamcity',
+//                    '--plugin', 'teamcity',
 //                    '--glue', 'gradle.cucumber',
 //                    '--glue', 'TeamCityCucumberPlugin.hooks',
 //                    '--glue', 'hooks',
 //                   'TeamCityCucumberPlugin.steps',
                     'src/test/resources']
+            ignoreExitValue = true
         }
     }
 }
