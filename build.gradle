@@ -44,8 +44,8 @@ task cucumber() {
             mainClass = "io.cucumber.core.cli.Main"
             classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
             args = ['--plugin', 'pretty',
-//                    '--plugin', 'plugins.TeamCityPlugin',
-                    '--plugin', 'teamcity',
+                    '--plugin', 'plugins.TeamCityPlugin',
+//                    '--plugin', 'teamcity',
 //                    '--glue', 'gradle.cucumber',
 //                    '--glue', 'TeamCityCucumberPlugin.hooks',
 //                    '--glue', 'hooks',
