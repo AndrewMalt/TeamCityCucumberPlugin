@@ -14,9 +14,9 @@ public class TeamCityPlugin implements EventListener {
 
   private void handleTestCaseFinished(TestCaseFinished event) {
     if (event.getResult().getStatus().is(Status.PASSED)) {
-      System.out.println("##teamcity[testFinished]");
+      System.out.println("##teamcity[testFinished name = '" + event.getTestCase().getName() + "']");
     } else {
-      System.out.println("##teamcity[testFailed]");
+      System.out.println("##teamcity[testFailed name = '" + event.getTestCase().getName() + "']");
     }
 //    System.out.println("------STATUS---->>> " + event.getResult().getStatus());
   }
