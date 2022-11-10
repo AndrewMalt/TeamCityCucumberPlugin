@@ -10,7 +10,7 @@ Feature: First test with Cucumber
     And say "<two>"
     And send "true"
 
-  Scenario: try to test Hello World 2
+  Scenario: try to test Hello World 1
     Given say "<one>"
     And say "<two>"
     And send "false"

@@ -7,7 +7,8 @@ import org.junit.Assert;
 public class StepDefinitions {
 
   @Given("say {string}")
-  public void qwe(String text) {
+  public void qwe(String text) throws InterruptedException {
+    Thread.sleep(2000);
     System.out.println("----->>> " + text);
   }
 
