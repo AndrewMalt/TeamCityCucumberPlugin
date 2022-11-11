@@ -10,6 +10,7 @@ Feature: First test with Cucumber
     Given say "<one>"
     And say "<two>"
     And send "<boolean>"
+    And send "<boolean>"
 
     Examples:
       | one         | two        | boolean |
