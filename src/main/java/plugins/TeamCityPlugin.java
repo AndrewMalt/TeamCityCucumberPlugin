@@ -1,8 +1,10 @@
 package plugins;
 
+import io.cucumber.core.gherkin.Pickle;
 import io.cucumber.plugin.EventListener;
 import io.cucumber.plugin.event.Event;
 import io.cucumber.plugin.event.EventPublisher;
+import io.cucumber.plugin.event.PickleStepTestStep;
 import io.cucumber.plugin.event.Status;
 import io.cucumber.plugin.event.TestCaseFinished;
 import io.cucumber.plugin.event.TestCaseStarted;
@@ -22,10 +24,18 @@ public class TeamCityPlugin implements EventListener {
 
   private void handleTestCaseStarted(TestCaseStarted event) {
     System.out.println("##teamcity[testStarted name = '" + event.getTestCase().getName() + "' timestamp = '" + extractTimeStamp(event) + "']");
+//    System.out.println("##teamcity[testStarted name = '" + event.getTestCase().getUri() + "' timestamp = '" + extractTimeStamp(event) + "']");
+//    System.out.println("##teamcity[testStarted name = '" + event.getTestCase().getUri().getAuthority() + "' timestamp = '" + extractTimeStamp(event) + "']");
+//    System.out.println("##teamcity[testStarted name = '" + event.getTestCase().getUri().getFragment() + "' timestamp = '" + extractTimeStamp(event) + "']");
+//    System.out.println("##teamcity[testStarted name = '" + event.getTestCase().getUri().getHost() + "' timestamp = '" + extractTimeStamp(event) + "']");
+//    System.out.println("##teamcity[testStarted name = '" + event.getTestCase().getKeyword() + "' timestamp = '" + extractTimeStamp(event) + "']");
+//    System.out.println("##teamcity[testStarted name = '" + event.getTestCase().getUri().getRawPath() + "' timestamp = '" + extractTimeStamp(event) + "']");
+
   }
 
   private void handleTestCaseFinished(TestCaseFinished event) {
     if (event.getResult().getStatus().is(Status.PASSED)) {
+
 //      System.out.println("##teamcity[testStarted name = '" + event.getTestCase().getName() + " " + event.getTestCase().getId() + "']");
 //      System.out.println("##teamcity[testStarted name = '" + event.getTestCase().getName() + "']");
 //      System.out.println("##teamcity[testFinished name = '" + event.getTestCase().getName() + " " + event.getTestCase().getId() + "']");
