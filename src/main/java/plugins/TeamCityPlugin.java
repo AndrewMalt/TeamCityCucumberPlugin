@@ -23,7 +23,8 @@ public class TeamCityPlugin implements EventListener {
   }
 
   private void handleTestCaseStarted(TestCaseStarted event) {
-    System.out.println("##teamcity[testStarted name = '" + event.getTestCase().getName() + "' timestamp = '" + extractTimeStamp(event) + "']");
+//    System.out.println("##teamcity[testStarted name = '" + event.getTestCase().getName() + "' timestamp = '" + extractTimeStamp(event) + "']");
+    System.out.println("##teamcity[testStarted name = '" + event.getTestCase().getId() + "' timestamp = '" + extractTimeStamp(event) + "']");
 //    System.out.println("##teamcity[testStarted name = '" + event.getTestCase().getUri() + "' timestamp = '" + extractTimeStamp(event) + "']");
 //    System.out.println("##teamcity[testStarted name = '" + event.getTestCase().getUri().getAuthority() + "' timestamp = '" + extractTimeStamp(event) + "']");
 //    System.out.println("##teamcity[testStarted name = '" + event.getTestCase().getUri().getFragment() + "' timestamp = '" + extractTimeStamp(event) + "']");
@@ -39,12 +40,14 @@ public class TeamCityPlugin implements EventListener {
 //      System.out.println("##teamcity[testStarted name = '" + event.getTestCase().getName() + " " + event.getTestCase().getId() + "']");
 //      System.out.println("##teamcity[testStarted name = '" + event.getTestCase().getName() + "']");
 //      System.out.println("##teamcity[testFinished name = '" + event.getTestCase().getName() + " " + event.getTestCase().getId() + "']");
-      System.out.println("##teamcity[testFinished name = '" + event.getTestCase().getName() + "' timestamp = '" + extractTimeStamp(event) + "']");
+      System.out.println("##teamcity[testFinished name = '" + event.getTestCase().getId() + "' timestamp = '" + extractTimeStamp(event) + "']");
+//      System.out.println("##teamcity[testFinished name = '" + event.getTestCase().getName() + "' timestamp = '" + extractTimeStamp(event) + "']");
     } else {
 //      System.out.println("##teamcity[testStarted name = '" + event.getTestCase().getName() + " " + event.getTestCase().getId() + "']");
 //      System.out.println("##teamcity[testStarted name = '" + event.getTestCase().getName() + "']");
 //      System.out.println("##teamcity[testFailed name = '" + event.getTestCase().getName() + " " + event.getTestCase().getId() + "']");
-      System.out.println("##teamcity[testFinished name = '" + event.getTestCase().getName() + "' timestamp = '" + extractTimeStamp(event) + "']");
+//      System.out.println("##teamcity[testFinished name = '" + event.getTestCase().getName() + "' timestamp = '" + extractTimeStamp(event) + "']");
+      System.out.println("##teamcity[testFailed name = '" + event.getTestCase().getId() + "' timestamp = '" + extractTimeStamp(event) + "']");
 //      System.out.println("##teamcity[testFailed name = '" + event.getTestCase().getName() + "' timestamp = '" + extractTimeStamp(event) + "']");
     }
 //    System.out.println("------STATUS---->>> " + event.getResult().getStatus());
