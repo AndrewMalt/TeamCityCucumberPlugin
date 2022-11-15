@@ -1,20 +1,19 @@
 package plugins;
 
-import io.cucumber.core.gherkin.Pickle;
 import io.cucumber.plugin.EventListener;
-import io.cucumber.plugin.event.Event;
 import io.cucumber.plugin.event.EventPublisher;
-import io.cucumber.plugin.event.PickleStepTestStep;
 import io.cucumber.plugin.event.Status;
 import io.cucumber.plugin.event.TestCaseFinished;
 import io.cucumber.plugin.event.TestCaseStarted;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+import java.net.URI;
 
 public class TeamCityPlugin implements EventListener {
 
-  private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'hh:mm:ss.SSSZ");
+//  private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'hh:mm:ss.SSSZ");
+  private URI currentFeatureFile = null;
+  private String previousTestCaseName;
+  private int exampleNumber;
+  private String testCaseName;
 
   @Override
   public void setEventPublisher(EventPublisher publisher) {
@@ -23,38 +22,39 @@ public class TeamCityPlugin implements EventListener {
   }
 
   private void handleTestCaseStarted(TestCaseStarted event) {
-//    System.out.println("##teamcity[testStarted name = '" + event.getTestCase().getName() + "' timestamp = '" + extractTimeStamp(event) + "']");
-    System.out.println("##teamcity[testStarted name = '" + event.getTestCase().getId() + "' timestamp = '" + extractTimeStamp(event) + "']");
-//    System.out.println("##teamcity[testStarted name = '" + event.getTestCase().getUri() + "' timestamp = '" + extractTimeStamp(event) + "']");
-//    System.out.println("##teamcity[testStarted name = '" + event.getTestCase().getUri().getAuthority() + "' timestamp = '" + extractTimeStamp(event) + "']");
-//    System.out.println("##teamcity[testStarted name = '" + event.getTestCase().getUri().getFragment() + "' timestamp = '" + extractTimeStamp(event) + "']");
-//    System.out.println("##teamcity[testStarted name = '" + event.getTestCase().getUri().getHost() + "' timestamp = '" + extractTimeStamp(event) + "']");
-//    System.out.println("##teamcity[testStarted name = '" + event.getTestCase().getKeyword() + "' timestamp = '" + extractTimeStamp(event) + "']");
-//    System.out.println("##teamcity[testStarted name = '" + event.getTestCase().getUri().getRawPath() + "' timestamp = '" + extractTimeStamp(event) + "']");
 
+    testCaseName = event.getTestCase().getName();
+
+    if (currentFeatureFile == null || !currentFeatureFile.equals(event.getTestCase().getUri())) {
+      currentFeatureFile = event.getTestCase().getUri();
+      previousTestCaseName = "";
+      exampleNumber = 1;
+    }
+
+    if (testCaseName.equals(previousTestCaseName)) {
+      testCaseName = getUniqueTestNameForScenarioExample(testCaseName, ++exampleNumber);
+    } else {
+      previousTestCaseName = event.getTestCase().getName();
+      exampleNumber = 1;
+    }
+    System.out.println("##teamcity[testStarted name = '" + testCaseName);
   }
 
   private void handleTestCaseFinished(TestCaseFinished event) {
     if (event.getResult().getStatus().is(Status.PASSED)) {
-
-//      System.out.println("##teamcity[testStarted name = '" + event.getTestCase().getName() + " " + event.getTestCase().getId() + "']");
-//      System.out.println("##teamcity[testStarted name = '" + event.getTestCase().getName() + "']");
-//      System.out.println("##teamcity[testFinished name = '" + event.getTestCase().getName() + " " + event.getTestCase().getId() + "']");
-      System.out.println("##teamcity[testFinished name = '" + event.getTestCase().getId() + "' timestamp = '" + extractTimeStamp(event) + "']");
-//      System.out.println("##teamcity[testFinished name = '" + event.getTestCase().getName() + "' timestamp = '" + extractTimeStamp(event) + "']");
+      System.out.println("##teamcity[testFinished name = '" + testCaseName);
     } else {
-//      System.out.println("##teamcity[testStarted name = '" + event.getTestCase().getName() + " " + event.getTestCase().getId() + "']");
-//      System.out.println("##teamcity[testStarted name = '" + event.getTestCase().getName() + "']");
-//      System.out.println("##teamcity[testFailed name = '" + event.getTestCase().getName() + " " + event.getTestCase().getId() + "']");
-//      System.out.println("##teamcity[testFinished name = '" + event.getTestCase().getName() + "' timestamp = '" + extractTimeStamp(event) + "']");
-      System.out.println("##teamcity[testFailed name = '" + event.getTestCase().getId() + "' timestamp = '" + extractTimeStamp(event) + "']");
+      System.out.println("##teamcity[testFailed name = '" + testCaseName);
 //      System.out.println("##teamcity[testFailed name = '" + event.getTestCase().getName() + "' timestamp = '" + extractTimeStamp(event) + "']");
     }
-//    System.out.println("------STATUS---->>> " + event.getResult().getStatus());
   }
 
-  private String extractTimeStamp(Event event) {
-    ZonedDateTime date = event.getInstant().atZone(ZoneOffset.UTC);
-    return DATE_FORMAT.format(date);
+//  private String extractTimeStamp(Event event) {
+//    ZonedDateTime date = event.getInstant().atZone(ZoneOffset.UTC);
+//    return DATE_FORMAT.format(date);
+//  }
+
+  private static String getUniqueTestNameForScenarioExample(String testCaseName, int exampleNumber) {
+    return testCaseName + (testCaseName.contains(" ") ? " " : "_") + exampleNumber;
   }
 }

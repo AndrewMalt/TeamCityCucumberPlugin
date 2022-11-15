@@ -1,5 +1,5 @@
 #language:en
-@testPlugin
+@testPlugin @param
 Feature: First test with Cucumber
 
   Background: set preTest
