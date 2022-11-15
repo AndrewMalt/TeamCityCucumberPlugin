@@ -37,14 +37,14 @@ public class TeamCityPlugin implements EventListener {
       previousTestCaseName = event.getTestCase().getName();
       exampleNumber = 1;
     }
-    System.out.println("##teamcity[testStarted name = '" + testCaseName);
+    System.out.println("##teamcity[testStarted name = '" + testCaseName + "']");
   }
 
   private void handleTestCaseFinished(TestCaseFinished event) {
     if (event.getResult().getStatus().is(Status.PASSED)) {
-      System.out.println("##teamcity[testFinished name = '" + testCaseName);
+      System.out.println("##teamcity[testFinished name = '" + testCaseName + "']");
     } else {
-      System.out.println("##teamcity[testFailed name = '" + testCaseName);
+      System.out.println("##teamcity[testFailed name = '" + testCaseName + "']");
 //      System.out.println("##teamcity[testFailed name = '" + event.getTestCase().getName() + "' timestamp = '" + extractTimeStamp(event) + "']");
     }
   }
