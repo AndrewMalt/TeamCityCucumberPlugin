@@ -1,19 +1,20 @@
 package plugins;
 
 import io.cucumber.plugin.EventListener;
-import io.cucumber.plugin.event.EventPublisher;
-import io.cucumber.plugin.event.Status;
-import io.cucumber.plugin.event.TestCaseFinished;
-import io.cucumber.plugin.event.TestCaseStarted;
+import io.cucumber.plugin.event.*;
+
+import java.io.File;
 import java.net.URI;
+import java.nio.file.Path;
 
 public class TeamCityPlugin implements EventListener {
 
-//  private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'hh:mm:ss.SSSZ");
   private URI currentFeatureFile = null;
   private String previousTestCaseName;
   private int exampleNumber;
   private String testCaseName;
+
+//  private String
 
   @Override
   public void setEventPublisher(EventPublisher publisher) {
@@ -23,8 +24,29 @@ public class TeamCityPlugin implements EventListener {
 
   private void handleTestCaseStarted(TestCaseStarted event) {
 
-    testCaseName = event.getTestCase().getName();
+    getFileName(event);
 
+    testCaseName = event.getTestCase().getName();
+    String fullPath = event.getTestCase().getUri().getRawPath();
+
+//    Path p = Path.of(fullPath);
+//    System.out.println("-----------=-=------------------>> " + p.getFileName());
+    File f = new File(event.getTestCase().getUri());
+//    System.out.println("-----------=-=------------------>> " + f.getName().replace(".feature", ""));
+     String path;
+    try {
+      path = fullPath.substring(fullPath.indexOf("src"));
+    } catch (StringIndexOutOfBoundsException e) {
+      path = fullPath;
+    }
+//    String path = fullPath.substring(fullPath.indexOf("qqq"));
+
+    String filePath = event.getTestCase().getUri().getPath();
+    String fileName = filePath.substring(filePath.lastIndexOf("/") + 1, filePath.lastIndexOf("."));
+//    System.out.println("==================> " + fileName);
+
+//    System.out.println("-----p----->> > > " + path);
+//    System.out.println("-----path----->> > > " + event.getTestCase().getUri().getPath());
     if (currentFeatureFile == null || !currentFeatureFile.equals(event.getTestCase().getUri())) {
       currentFeatureFile = event.getTestCase().getUri();
       previousTestCaseName = "";
@@ -37,24 +59,40 @@ public class TeamCityPlugin implements EventListener {
       previousTestCaseName = event.getTestCase().getName();
       exampleNumber = 1;
     }
-    System.out.println("##teamcity[testStarted name = '" + testCaseName + "']");
+    System.out.println("##teamcity[testStarted name = '" + escape(testCaseName) + " (" + getFileName(event) + ")']");
   }
 
   private void handleTestCaseFinished(TestCaseFinished event) {
+
     if (event.getResult().getStatus().is(Status.PASSED)) {
-      System.out.println("##teamcity[testFinished name = '" + testCaseName + "']");
+      System.out.println("##teamcity[testFinished name = '" + escape(testCaseName) + " (" + getFileName(event) + ")']");
+    } else if (event.getResult().getStatus().is(Status.SKIPPED)) {
+      System.out.println("##teamcity[testIgnored name = '" + escape(testCaseName) + " (" + getFileName(event) + ")']");
     } else {
-      System.out.println("##teamcity[testFailed name = '" + testCaseName + "']");
-//      System.out.println("##teamcity[testFailed name = '" + event.getTestCase().getName() + "' timestamp = '" + extractTimeStamp(event) + "']");
+      System.out.println("##teamcity[testFailed name = '" + escape(testCaseName) + " (" + getFileName(event) + ")']");
     }
   }
 
-//  private String extractTimeStamp(Event event) {
-//    ZonedDateTime date = event.getInstant().atZone(ZoneOffset.UTC);
-//    return DATE_FORMAT.format(date);
-//  }
-
-  private static String getUniqueTestNameForScenarioExample(String testCaseName, int exampleNumber) {
+  private String getUniqueTestNameForScenarioExample(String testCaseName, int exampleNumber) {
     return testCaseName + (testCaseName.contains(" ") ? " " : "_") + exampleNumber;
+  }
+
+  private String getFileName(TestCaseEvent event) {
+    String filePath = event.getTestCase().getUri().getPath();
+    String fileName = filePath.substring(filePath.lastIndexOf("/") + 1, filePath.lastIndexOf("."));
+    return escape(fileName);
+  }
+
+  private String escape(String source) {
+    if (source == null) {
+      return "";
+    }
+    return source
+            .replace("|", "||")
+            .replace("'", "|'")
+            .replace("\n", "|n")
+            .replace("\r", "|r")
+            .replace("[", "|[")
+            .replace("]", "|]");
   }
 }

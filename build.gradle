@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'org.example'
-version '1.0-SNAPSHOT'
+//version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -12,13 +12,22 @@ repositories {
 dependencies {
 
     //JUnit5
-    implementation "org.junit.jupiter:junit-jupiter-api:5.8.2"
-    implementation "org.junit.jupiter:junit-jupiter-engine:5.8.2"
+    implementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+    implementation 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
 
     //Cucumber
-    implementation  'io.cucumber:cucumber-java:7.2.3'
-    implementation  'io.cucumber:cucumber-junit:7.2.3'
+    implementation 'io.cucumber:cucumber-java:7.11.1'
+    implementation 'io.cucumber:cucumber-junit:7.11.1'
 
+//    implementation  'io.cucumber:cucumber-java:6.0.0'
+//    implementation  'io.cucumber:cucumber-junit:6.0.0'
+
+    implementation 'com.jcraft:jsch:0.1.55'
+    implementation 'com.typesafe:config:1.4.2'
+
+
+    // https://mvnrepository.com/artifact/com.browserup/browserup-proxy-core
+    implementation 'com.browserup:browserup-proxy-core:2.1.2'
 
 }
 
@@ -31,6 +40,94 @@ configurations {
         extendsFrom implementation
     }
 }
+//DuplicatesStrategy.INHERIT
+//tasks.register('uberJar', Jar) {
+//    archiveClassifier = 'uber'
+//
+//    from sourceSets.main.output
+//
+//    dependsOn configurations.runtimeClasspath
+//    from {
+//        configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
+//    }
+//}
+
+task printSourceSetInformation(){
+    doLast{
+        sourceSets.each { srcSet ->
+            println "["+srcSet.name+"]"
+            print "-->Source directories: "+srcSet.allJava.srcDirs+"\n"
+            print "-->Output directories: "+srcSet.output.classesDirs.files+"\n"
+            println ""
+        }
+    }
+}
+
+task printSourceSetInformation1(){
+
+    doLast{
+        sourceSets.each { srcSet ->
+            println "["+srcSet.name+"]"
+            print "-->Source directories: "+srcSet.allJava.srcDirs+"\n"
+            print "-->Output directories: "+srcSet.output.classesDirs.files+"\n"
+            print "-->Compile classpath:\n"
+            srcSet.compileClasspath.files.each {
+                print "  "+it.path+"\n"
+            }
+            println ""
+        }
+    }
+}
+
+//java {
+//    withSourcesJar()
+//}
+
+
+
+jar {
+    manifest {
+        attributes "Main-Class": "io.cucumber.core.cli.Main"
+    }
+    baseName = '1'
+
+//    from sourceSets.main.allSource
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+//    from sourceSets.main.getResources()
+    from sourceSets.main.output + sourceSets.test.output
+
+    into 'src/main/resources', {
+        from 'src/main/resources'
+    }
+        into 'build/resources', {
+        from 'src/main/resources'
+    }
+
+//        into layout.buildDirectory.dir("resources")
+    //https://youtrack.jetbrains.com/issue/IDEA-197469
+    //https://stackoverflow.com/questions/51864473/where-do-resource-files-go-in-a-gradle-project-that-builds-a-java-9-module/51921521#51921521
+    //https://discuss.gradle.org/t/copy-resources-from-a-dependency-jar-or-war-file-in-gradle/12427/6
+    //https://discuss.gradle.org/t/extract-resources-from-jar-file/4669
+    //gradle get resources from jar
+    //
+
+}
+
+
+//task customFatJar(type: Jar) {
+//    manifest {
+//        attributes 'Main-Class': 'io.cucumber.core.cli.Main'
+//    }
+////    baseName = 'fat'
+//    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+////    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+//    from { configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output }
+//    with jar
+//}
 
 task cucumber() {
     dependsOn assemble, testClasses
@@ -50,6 +147,7 @@ task cucumber() {
 //                    '--glue', 'TeamCityCucumberPlugin.hooks',
 //                    '--glue', 'hooks',
 //                   'TeamCityCucumberPlugin.steps',
+//                    'src']
                     'src/test/resources']
             ignoreExitValue = true
         }

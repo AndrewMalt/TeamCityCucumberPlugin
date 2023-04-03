@@ -1,14 +1,11 @@
 #language:en
-@testPlugin @oneTest2
+@testPlugin @ReadText
 Feature: First test with Cucumber
 
   Background: set preTest
 #    Given say "zero"
 
 #  Scenario: try to test Hello World
-  Scenario: try to test Hello World One Test
+  Scenario: new test [super test]
     Given say "<one>"
-    And say "<two>"
-    And send "true"
-    And send "true"
-    And send "true"
+    And read text
