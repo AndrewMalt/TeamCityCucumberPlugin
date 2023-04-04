@@ -7,5 +7,5 @@ Feature: First test with Cucumber
 
 #  Scenario: try to test Hello World
   Scenario: new test [super test]
-    Given say "<one>"
+    Given say "test.prop"
     And read text

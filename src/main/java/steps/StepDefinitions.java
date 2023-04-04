@@ -1,5 +1,6 @@
 package steps;
 
+import helpers.PropertyLoader;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import org.junit.Assert;
@@ -14,8 +15,8 @@ public class StepDefinitions {
 
   @Given("say {string}")
   public void qwe(String text) throws InterruptedException {
-    Thread.sleep(2000);
-    System.out.println("----->>> " + text);
+    Thread.sleep(1000);
+    System.out.println("----->>> " + PropertyLoader.loadProperty(text));
   }
 
   @And("send {string}")
