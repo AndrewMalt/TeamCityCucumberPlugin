@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id "com.diffplug.spotless" version "6.18.0"
 }
 
 group 'org.example'
@@ -7,6 +8,13 @@ group 'org.example'
 
 repositories {
     mavenCentral()
+}
+
+spotless {
+    java {
+        targetExclude 'build/generated-sources/**'
+        googleJavaFormat()
+    }
 }
 
 dependencies {
@@ -19,16 +27,25 @@ dependencies {
     implementation 'io.cucumber:cucumber-java:7.11.1'
     implementation 'io.cucumber:cucumber-junit:7.11.1'
 
-//    implementation  'io.cucumber:cucumber-java:6.0.0'
-//    implementation  'io.cucumber:cucumber-junit:6.0.0'
+    //Rest-assured
+    implementation 'io.rest-assured:rest-assured:5.3.0'
 
     implementation 'com.jcraft:jsch:0.1.55'
     implementation 'com.typesafe:config:1.4.2'
 
+    //jackson
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.14.2'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.2'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.14.2'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2'
 
-    // https://mvnrepository.com/artifact/com.browserup/browserup-proxy-core
+
+    //browserup-proxy-core
     implementation 'com.browserup:browserup-proxy-core:2.1.2'
 
+    //lombok
+    implementation 'org.projectlombok:lombok:1.18.26'
+    annotationProcessor 'org.projectlombok:lombok:1.18.26'
 }
 
 test {
@@ -40,6 +57,7 @@ configurations {
         extendsFrom implementation
     }
 }
+
 //DuplicatesStrategy.INHERIT
 //tasks.register('uberJar', Jar) {
 //    archiveClassifier = 'uber'
@@ -90,7 +108,7 @@ jar {
         attributes "Main-Class": "io.cucumber.core.cli.Main"
     }
     baseName = '1'
-
+//    destinationDir = file("$rootDir/src/main/resources")
 //    from sourceSets.main.allSource
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
@@ -108,13 +126,7 @@ jar {
     }
 
 //        into layout.buildDirectory.dir("resources")
-    //https://youtrack.jetbrains.com/issue/IDEA-197469
-    //https://stackoverflow.com/questions/51864473/where-do-resource-files-go-in-a-gradle-project-that-builds-a-java-9-module/51921521#51921521
-    //https://discuss.gradle.org/t/copy-resources-from-a-dependency-jar-or-war-file-in-gradle/12427/6
-    //https://discuss.gradle.org/t/extract-resources-from-jar-file/4669
     //gradle get resources from jar
-    //
-
 }
 
 
@@ -142,6 +154,7 @@ task cucumber() {
             classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
             args = ['--plugin', 'pretty',
                     '--plugin', 'plugins.TeamCityPlugin',
+                    '--threads', '3',
 //                    '--plugin', 'teamcity',
 //                    '--glue', 'gradle.cucumber',
 //                    '--glue', 'TeamCityCucumberPlugin.hooks',
