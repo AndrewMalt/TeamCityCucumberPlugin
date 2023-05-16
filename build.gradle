@@ -1,13 +1,36 @@
-plugins {
-    id 'java'
-    id "com.diffplug.spotless" version "6.18.0"
-}
+apply plugin: 'java-library'
+apply plugin: "com.diffplug.spotless"
+apply plugin: 'io.qameta.allure'
 
 group 'org.example'
 //version '1.0-SNAPSHOT'
 
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        classpath "io.qameta.allure:allure-gradle:2.8.1"
+        classpath "io.qameta.allure:allure-cucumber7-jvm:${allureVersion}"
+        classpath "com.diffplug.spotless:spotless-plugin-gradle:6.18.0"
+    }
+}
+
 repositories {
     mavenCentral()
+}
+
+allure {
+    autoconfigure = true
+    version = "${allureVersion}"
+
+//    useCucumber2JVM {
+//        version = "${allureVersion}"
+//    }
 }
 
 spotless {
@@ -39,6 +62,11 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.14.2'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2'
 
+    //allure
+    implementation "io.qameta.allure:allure-cucumber7-jvm:${allureVersion}"
+    implementation "io.qameta.allure:allure-selenide:${allureVersion}"
+    implementation "io.qameta.allure:allure-rest-assured:${allureVersion}"
+    implementation "io.qameta.allure:allure-java-commons:${allureVersion}"
 
     //browserup-proxy-core
     implementation 'com.browserup:browserup-proxy-core:2.1.2'
@@ -58,95 +86,31 @@ configurations {
     }
 }
 
-//DuplicatesStrategy.INHERIT
-//tasks.register('uberJar', Jar) {
-//    archiveClassifier = 'uber'
-//
-//    from sourceSets.main.output
-//
-//    dependsOn configurations.runtimeClasspath
-//    from {
-//        configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
-//    }
-//}
-
-task printSourceSetInformation(){
-    doLast{
-        sourceSets.each { srcSet ->
-            println "["+srcSet.name+"]"
-            print "-->Source directories: "+srcSet.allJava.srcDirs+"\n"
-            print "-->Output directories: "+srcSet.output.classesDirs.files+"\n"
-            println ""
-        }
-    }
-}
-
-task printSourceSetInformation1(){
-
-    doLast{
-        sourceSets.each { srcSet ->
-            println "["+srcSet.name+"]"
-            print "-->Source directories: "+srcSet.allJava.srcDirs+"\n"
-            print "-->Output directories: "+srcSet.output.classesDirs.files+"\n"
-            print "-->Compile classpath:\n"
-            srcSet.compileClasspath.files.each {
-                print "  "+it.path+"\n"
-            }
-            println ""
-        }
-    }
-}
-
-//java {
-//    withSourcesJar()
-//}
-
-
-
 jar {
     manifest {
         attributes "Main-Class": "io.cucumber.core.cli.Main"
     }
     baseName = '1'
-//    destinationDir = file("$rootDir/src/main/resources")
-//    from sourceSets.main.allSource
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
-//    from sourceSets.main.getResources()
     from sourceSets.main.output + sourceSets.test.output
-
     into 'src/main/resources', {
         from 'src/main/resources'
     }
-        into 'build/resources', {
-        from 'src/main/resources'
+    into 'src/test/resources', {
+        from 'src/test/resources'
     }
-
-//        into layout.buildDirectory.dir("resources")
-    //gradle get resources from jar
 }
-
-
-//task customFatJar(type: Jar) {
-//    manifest {
-//        attributes 'Main-Class': 'io.cucumber.core.cli.Main'
-//    }
-////    baseName = 'fat'
-//    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-////    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
-//    from { configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output }
-//    with jar
-//}
 
 task cucumber() {
     dependsOn assemble, testClasses
     doLast {
         javaexec {
 
-            System.properties.each {k, v ->
+            System.properties.each { k, v ->
                 systemProperty k, v
             }
 
@@ -154,7 +118,9 @@ task cucumber() {
             classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
             args = ['--plugin', 'pretty',
                     '--plugin', 'plugins.TeamCityPlugin',
-                    '--threads', '3',
+                    '--plugin', 'core.api.TagCollectorPlugin',
+                    '--threads', '1',
+//                    '--threads', '3',
 //                    '--plugin', 'teamcity',
 //                    '--glue', 'gradle.cucumber',
 //                    '--glue', 'TeamCityCucumberPlugin.hooks',

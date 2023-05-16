@@ -15,23 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 
 public class StepDefinitions {
-  //    ObjectWriter ow =
-  //        new ObjectMapper().findAndRegisterModules().writer().withDefaultPrettyPrinter();
-  //    //    ObjectMapper ow = new ObjectMapper();
-  //    TreeSet<String> set = new TreeSet<>();
-  //    set.add("qwe12e");
-  //    set.add("qwe11232e");
-  //    set.add("qwe2312e");
-  //    set.add("qw435e12e");
-  //    set.add("qw435e12e");
-  //    set.add("435");
-  //
-  //    EndpointBody endpointBody = new EndpointBody();
-  //    endpointBody.setEndpoints(set);
-  //    endpointBody.setDate(LocalDate.now().toString());
-  //    String json = ow.writeValueAsString(endpointBody);
-  //
-  //    System.out.println(json);
+
   @Given("say {string}")
   public void qwe(String text) throws InterruptedException {
     sleep(1000);
@@ -74,5 +58,10 @@ public class StepDefinitions {
 
     String str = "qweq";
     System.out.println(StringUtils.removeEnd(str, "e*"));
+  }
+
+  @And("throw NPE")
+  public void throwNPE() throws Exception {
+    throw (Exception) null;
   }
 }

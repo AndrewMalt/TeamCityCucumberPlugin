@@ -6,3 +6,5 @@ out/
 *.iml
 *.log
 *.class
+/build/
+/.idea/
