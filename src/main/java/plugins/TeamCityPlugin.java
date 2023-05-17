@@ -2,10 +2,8 @@ package plugins;
 
 import io.cucumber.plugin.EventListener;
 import io.cucumber.plugin.event.*;
-import org.apache.commons.io.FilenameUtils;
-
-import java.io.File;
 import java.net.URI;
+import org.apache.commons.io.FilenameUtils;
 
 public class TeamCityPlugin implements EventListener {
 
@@ -13,8 +11,6 @@ public class TeamCityPlugin implements EventListener {
   private String previousTestCaseName;
   private int exampleNumber;
   private String testCaseName;
-
-  //  private String
 
   @Override
   public void setEventPublisher(EventPublisher publisher) {
@@ -27,27 +23,7 @@ public class TeamCityPlugin implements EventListener {
     getFileName(event);
 
     testCaseName = event.getTestCase().getName();
-    String fullPath = event.getTestCase().getUri().getRawPath();
 
-    //    Path p = Path.of(fullPath);
-    //    System.out.println("-----------=-=------------------>> " + p.getFileName());
-    File f = new File(event.getTestCase().getUri());
-    //    System.out.println("-----------=-=------------------>> " + f.getName().replace(".feature",
-    // ""));
-    String path;
-    try {
-      path = fullPath.substring(fullPath.indexOf("src"));
-    } catch (StringIndexOutOfBoundsException e) {
-      path = fullPath;
-    }
-    //    String path = fullPath.substring(fullPath.indexOf("qqq"));
-
-    String filePath = event.getTestCase().getUri().getPath();
-    String fileName = filePath.substring(filePath.lastIndexOf("/") + 1, filePath.lastIndexOf("."));
-    //    System.out.println("==================> " + fileName);
-
-    //    System.out.println("-----p----->> > > " + path);
-    //    System.out.println("-----path----->> > > " + event.getTestCase().getUri().getPath());
     if (currentFeatureFile == null || !currentFeatureFile.equals(event.getTestCase().getUri())) {
       currentFeatureFile = event.getTestCase().getUri();
       previousTestCaseName = "";
