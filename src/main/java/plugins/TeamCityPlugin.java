@@ -2,6 +2,8 @@ package plugins;
 
 import io.cucumber.plugin.EventListener;
 import io.cucumber.plugin.event.*;
+import org.apache.commons.io.FilenameUtils;
+
 import java.io.File;
 import java.net.URI;
 
@@ -97,9 +99,7 @@ public class TeamCityPlugin implements EventListener {
   }
 
   private String getFileName(TestCaseEvent event) {
-    String filePath = event.getTestCase().getUri().getPath();
-    String fileName = filePath.substring(filePath.lastIndexOf("/") + 1, filePath.lastIndexOf("."));
-    return escape(fileName);
+    return escape(FilenameUtils.getBaseName(String.valueOf(event.getTestCase().getUri())));
   }
 
   private String escape(String source) {

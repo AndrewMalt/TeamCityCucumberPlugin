@@ -74,6 +74,10 @@ dependencies {
     //lombok
     implementation 'org.projectlombok:lombok:1.18.26'
     annotationProcessor 'org.projectlombok:lombok:1.18.26'
+
+    //httpComponents
+    api group: 'commons-io', name: 'commons-io', version: '2.11.0'
+
 }
 
 test {
