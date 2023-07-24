@@ -64,4 +64,9 @@ public class StepDefinitions {
   public void throwNPE() throws Exception {
     throw (Exception) null;
   }
+
+  @And("read prop {string}")
+  public void readProp(String propName) {
+    System.out.println("--------------->>> >> > " + System.getProperty(propName));
+  }
 }

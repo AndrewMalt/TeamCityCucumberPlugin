@@ -1,8 +1,13 @@
 {
-  "date" : "16.05.2023",
-  "totalTestCases" : "8",
-  "ui" : "2",
-  "api" : "3",
-  "mix" : "3",
-  "endpoints" : [ ]
+  "date" : "24.07.2023",
+  "totalTestCases" : "1",
+  "ui" : "0",
+  "api" : "1",
+  "mix" : "0",
+  "endpoints" : [ ],
+  "tags" : {
+    "uiT" : "thee",
+    "apiT" : null,
+    "mixT" : "qweqweqweqweq"
+  }
 }

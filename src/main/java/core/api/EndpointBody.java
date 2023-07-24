@@ -13,9 +13,12 @@ import lombok.Setter;
 public class EndpointBody {
   //    private LocalDate date = LocalDate.now();
   private String date;
+  //  @JsonNaming("total_")
   private String totalTestCases;
   private String ui;
   private String api;
   private String mix;
   private TreeSet<String> endpoints;
+
+  private Tags tags;
 }

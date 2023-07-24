@@ -2,6 +2,7 @@ package steps;
 
 import static io.restassured.RestAssured.given;
 
+import com.codeborne.selenide.Selenide;
 import core.api.EndpointCollector;
 import helpers.VarStore;
 import io.cucumber.datatable.DataTable;
@@ -27,7 +28,7 @@ public class RestSteps {
     //        requestParams.
   }
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws InterruptedException {
 
     //        Response response = given()
     //        given()
@@ -45,6 +46,10 @@ public class RestSteps {
     //                .response();
     //       String name = response.getBody().jsonPath().get("[0].name");
     //        System.out.println("-------->>> " + name);
+    //    WebDriver driver = new ChromeDriver();
+    //    driver.get("https://ya.ru/");
+    //    Thread.sleep(3000);
+    Selenide.open("https://ya.ru/");
   }
 
   @And("say URL {string}")

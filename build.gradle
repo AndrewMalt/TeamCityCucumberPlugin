@@ -56,6 +56,10 @@ dependencies {
     implementation 'com.jcraft:jsch:0.1.55'
     implementation 'com.typesafe:config:1.4.2'
 
+    //assertj-core
+    implementation 'org.assertj:assertj-core:3.24.2'
+
+
     //jackson
     implementation 'com.fasterxml.jackson.core:jackson-core:2.14.2'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.2'
@@ -68,6 +72,9 @@ dependencies {
     implementation "io.qameta.allure:allure-rest-assured:${allureVersion}"
     implementation "io.qameta.allure:allure-java-commons:${allureVersion}"
 
+    //kafka
+    implementation "org.apache.kafka:kafka-clients:3.4.0"
+
     //browserup-proxy-core
     implementation 'com.browserup:browserup-proxy-core:2.1.2'
 
@@ -77,6 +84,32 @@ dependencies {
 
     //httpComponents
     api group: 'commons-io', name: 'commons-io', version: '2.11.0'
+
+    //selenide
+    implementation 'com.codeborne:selenide:6.14.1'
+
+    implementation files('src/main/resources/qwer-2.0.jar')
+
+    // https://mvnrepository.com/artifact/org.owasp.encoder/encoder
+    implementation 'org.owasp.encoder:encoder:1.2.3'
+
+    // https://mvnrepository.com/artifact/org.owasp.esapi/esapi
+    implementation 'org.owasp.esapi:esapi:2.5.2.0'
+
+    // DataBase
+    implementation 'com.zaxxer:HikariCP:5.0.1'
+    implementation 'com.h2database:h2:2.1.214'
+    implementation 'org.springframework.boot:spring-boot-starter-test:2.6.5'
+    implementation 'org.springframework:spring-jdbc:5.3.10'
+
+
+//    implementation 'org.springframework.data:spring-data-jdbc:3.0.6'
+//    implementation 'org.springframework.retry:spring-retry:2.0.0'
+
+
+
+
+
 
 }
 
@@ -90,7 +123,8 @@ configurations {
     }
 }
 
-jar {
+task bigJar(type: Jar) {
+//jar {
     manifest {
         attributes "Main-Class": "io.cucumber.core.cli.Main"
     }
@@ -107,6 +141,8 @@ jar {
     into 'src/test/resources', {
         from 'src/test/resources'
     }
+//    with jar
+
 }
 
 task cucumber() {
@@ -122,7 +158,8 @@ task cucumber() {
             classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
             args = ['--plugin', 'pretty',
                     '--plugin', 'plugins.TeamCityPlugin',
-                    '--plugin', 'core.api.TagCollectorPlugin',
+//                    '--plugin', 'io.cucumber.core.plugin.TeamCityPlugin',
+//                    '--plugin', 'core.api.TagCollectorPlugin',
                     '--threads', '1',
 //                    '--threads', '3',
 //                    '--plugin', 'teamcity',
