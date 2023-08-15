@@ -1,5 +1,6 @@
 package hooks;
 
+import com.typesafe.config.ConfigFactory;
 import helpers.VarStore;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -9,9 +10,14 @@ import java.util.Map;
 public class SetupHooks {
 
   public static Map<String, Object> varStore;
+  public static final String DEFAULT_CONFIG = "url.conf";
 
   @BeforeAll
-  public static void setUp2() {}
+  public static void setUp2() {
+    if (System.getProperty("config.resource") == null) {
+      System.setProperty("config.resource", DEFAULT_CONFIG);
+    }
+  }
 
   //  @Before
   //  public void bef(Scenario scenario) {

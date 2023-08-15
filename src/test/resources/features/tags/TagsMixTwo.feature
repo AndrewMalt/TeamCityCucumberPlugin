@@ -17,6 +17,13 @@ Feature: First test with Cucumber
     And say URL "https://habr.com/ru/flows/admin?qweqwe"
     And say URL "https://habr.com/ru/flows/admin?qweq*&we"
     And say URL "https://habr.com/ru/users/alizar/"
+
+    And say URL "https://habr.com/pet/findByStatus"
+
+    And say URL "https://habr.com/pet/1234"
+
+    And say URL "https://habr.com/pet/1234/uploadImage"
+    And say URL "https://habr.com/user/Qwert"
 #    And say URL "https://yandex.ru/qwe/"
 #    And say URL "https://yandex.ru/qwe/"
     Given say "<o1ne>"

@@ -17,6 +17,8 @@ public class WriteFile {
   }
 
   public static String getProp(String name) {
+//    System.
+//    System.getenv()
     return System.getProperty(name) == null ? "T_T" : System.getProperty(name);
   }
   //    public static void main(String[] args) throws IOException {

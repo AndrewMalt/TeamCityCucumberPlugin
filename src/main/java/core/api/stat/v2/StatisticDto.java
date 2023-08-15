@@ -25,5 +25,6 @@ public class StatisticDto {
   @JsonProperty("app_version")
   private String appVersion;
 
+  @JsonProperty("metrics")
   private List<MetricDto> metricDto;
 }

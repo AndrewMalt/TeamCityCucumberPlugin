@@ -1,10 +1,19 @@
 {
-  "date" : "24.07.2023",
-  "totalTestCases" : "1",
-  "ui" : "0",
-  "api" : "1",
-  "mix" : "0",
-  "endpoints" : [ ],
+  "date" : "15.08.2023",
+  "totalTestCases" : "8",
+  "ui" : "2",
+  "api" : "3",
+  "mix" : "3",
+  "endpoints" : [
+    "/pet/1234",
+    "/pet/1234/uploadImage",
+    "/pet/findByStatus",
+    "/ru/companies/avito/articles/734430",
+    "/ru/flows/admin",
+    "/ru/flows/develop",
+    "/ru/users/alizar",
+    "/user/Qwert"
+  ],
   "tags" : {
     "uiT" : "thee",
     "apiT" : null,

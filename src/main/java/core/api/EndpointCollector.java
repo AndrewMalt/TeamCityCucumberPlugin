@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import core.api.stat.v2.MetricDto;
 import core.api.stat.v2.StatisticDto;
-import core.api.stat.v2.ValueDto;
+//import core.api.stat.v2.ValueDto;
 import io.cucumber.java.AfterAll;
 import java.io.File;
 import java.io.IOException;
@@ -105,10 +105,11 @@ public class EndpointCollector /* implements EventListener */ {
     statisticDto.setAppVersion(getProp("app_version"));
     statisticDto.setAppName(getProp("app_name"));
     List<MetricDto> listMetricDto = new ArrayList<>();
-    listMetricDto.add(new ValueDto("count", String.valueOf(TagCollectorPlugin.total)));
-    listMetricDto.add(new ValueDto("api", String.valueOf(TagCollectorPlugin.apiNum)));
-    listMetricDto.add(new ValueDto("ui", String.valueOf(TagCollectorPlugin.uiNum)));
-    listMetricDto.add(new ValueDto("mix", String.valueOf(TagCollectorPlugin.mixNum)));
+
+    listMetricDto.add(new MetricDto("count", String.valueOf(TagCollectorPlugin.total)));
+    listMetricDto.add(new MetricDto("api", String.valueOf(TagCollectorPlugin.apiNum)));
+    listMetricDto.add(new MetricDto("ui", String.valueOf(TagCollectorPlugin.uiNum)));
+    listMetricDto.add(new MetricDto("mix", String.valueOf(TagCollectorPlugin.mixNum)));
     EndpointCollector.getInstance()
         .endpointCollection
         .forEach(tag -> listMetricDto.add(new MetricDto(tag)));

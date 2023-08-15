@@ -2,6 +2,7 @@ package steps;
 
 import static java.lang.Thread.sleep;
 
+import com.typesafe.config.ConfigFactory;
 import helpers.PropertyLoader;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -18,7 +19,7 @@ public class StepDefinitions {
 
   @Given("say {string}")
   public void qwe(String text) throws InterruptedException {
-    sleep(1000);
+//    sleep(1000);
     System.out.println("----->>> " + PropertyLoader.loadProperty(text));
   }
 
@@ -67,6 +68,12 @@ public class StepDefinitions {
 
   @And("read prop {string}")
   public void readProp(String propName) {
-    System.out.println("--------------->>> >> > " + System.getProperty(propName));
+    System.out.println("--------getProperty------->>> >> > " + System.getProperty(propName));
+    System.out.println("---------getenv------>>> >> > " + System.getenv(propName));
+  }
+  @Given("read conf {string}")
+  public void readConf(String name) {
+    System.out.println("----- " + name + " -------->>> " + ConfigFactory.load().getString(name));
+
   }
 }
