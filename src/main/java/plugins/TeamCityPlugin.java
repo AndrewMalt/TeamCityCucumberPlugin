@@ -2,14 +2,11 @@ package plugins;
 
 import io.cucumber.plugin.EventListener;
 import io.cucumber.plugin.event.*;
+import org.apache.commons.io.FilenameUtils;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-
-import org.apache.commons.io.FilenameUtils;
 
 public class TeamCityPlugin implements EventListener {
 
@@ -77,12 +74,12 @@ public class TeamCityPlugin implements EventListener {
   }
 
   private String getUniqueTestNameForScenarioExample(String testCaseName, int exampleNumber) {
-    return URLDecoder.decode(testCaseName + (testCaseName.contains(" ") ? " " : "_") + exampleNumber,
-            StandardCharsets.UTF_8);
+    return testCaseName + (testCaseName.contains(" ") ? " " : "_") + exampleNumber;
   }
 
   private String getFileName(TestCaseEvent event) {
-    return escape(FilenameUtils.getBaseName(String.valueOf(event.getTestCase().getUri())));
+    return URLDecoder.decode(escape(FilenameUtils.getBaseName(String.valueOf(event.getTestCase().getUri()))),
+            StandardCharsets.UTF_8);
   }
 
   private String escape(String source) {
