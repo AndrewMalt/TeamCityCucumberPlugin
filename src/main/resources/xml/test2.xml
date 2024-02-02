@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="WINDOWS-1251"?>
+<company>
+    <staff id="1001">
+        <firstname pam="gwegweg" q="12">yong</firstname>
+        <lastname>mook kim</lastname>
+        <nickname>mkyong</nickname>
+        <salary currency="USD">100000</salary>
+    </staff>
+    <staff id="2001">
+        <firstname pam="gwфывegweg" q="122">Андрей</firstname>
+        <lastname pam="123">yin fong</lastname>
+        <nickname>fong fong</nickname>
+        <salary currency="INR">200000</salary>
+    </staff>
+</company>

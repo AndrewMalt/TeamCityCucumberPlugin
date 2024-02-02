@@ -106,11 +106,38 @@ dependencies {
 //    implementation 'org.springframework.data:spring-data-jdbc:3.0.6'
 //    implementation 'org.springframework.retry:spring-retry:2.0.0'
 
+}
 
+configurations.implementation.setCanBeResolved(true)
+configurations.runtimeOnly.setCanBeResolved(true)
 
+//task downloadDependencies(type: Exec) {
+//    configurations.implementation.files + configurations.runtimeOnly.files
+//    finalizedBy "cacheToMavenLocal"
+//    commandLine "echo", "Downloaded all dependencies and copied to mavenLocal"
+//}
+//
+task cacheToMavenLocal(type: Copy) {
+    from new File(gradle.gradleUserHomeDir, "caches/modules-2/files-2.1")
+    into "lib2"
+    eachFile {
+        List<String> parts = it.path.split("/")
+        it.path = [parts[0].replace(".","/"), parts[1], parts[2], parts[4]].join("/")
+    }
+    includeEmptyDirs false
+}
 
-
-
+allprojects {
+    tasks.register("downloadDependencies", Copy) { Copy copy ->
+        copy.into "dep"
+        copy.from {
+            configurations.matching { Configuration c ->
+                c.isCanBeResolved()
+            }.collect { Configuration c ->
+                c.resolve()
+            }.flatten().unique()
+        }
+    }
 }
 
 test {
@@ -123,26 +150,37 @@ configurations {
     }
 }
 
-task bigJar(type: Jar) {
-//jar {
-    manifest {
-        attributes "Main-Class": "io.cucumber.core.cli.Main"
-    }
-    baseName = '1'
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-    from sourceSets.main.output + sourceSets.test.output
-    into 'src/main/resources', {
-        from 'src/main/resources'
-    }
-    into 'src/test/resources', {
-        from 'src/test/resources'
-    }
-//    with jar
+//task bigJar(type: Jar) {
+////jar {
+//    manifest {
+//        attributes "Main-Class": "io.cucumber.core.cli.Main"
+//    }
+//    baseName = '1'
+//    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+//    exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
+//    from {
+//        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+//    }
+//    from sourceSets.main.output + sourceSets.test.output
+//    into 'src/main/resources', {
+//        from 'src/main/resources'
+//    }
+//    into 'src/test/resources', {
+//        from 'src/test/resources'
+//    }
+////    with jar
+//
+//}
 
+task runProp(type: JavaExec) {
+    group = "Execution"
+    description = "Run the main class with JavaExecTask"
+    classpath = sourceSets.main.runtimeClasspath
+    setMainClass("src/test/java/SysVarTest.java")
+    System.properties.each { k, v ->
+        systemProperty k, v
+    }
+//    mainClass = "src/test/java/SysVarTest.java"
 }
 
 task cucumber() {
@@ -167,8 +205,8 @@ task cucumber() {
 //                    '--glue', 'TeamCityCucumberPlugin.hooks',
 //                    '--glue', 'hooks',
 //                   'TeamCityCucumberPlugin.steps',
-//                    'src']
-                    'src/test/resources']
+                    'src']
+//                    'src/test/resources']
             ignoreExitValue = true
         }
     }

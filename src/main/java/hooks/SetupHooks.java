@@ -1,6 +1,5 @@
 package hooks;
 
-import com.typesafe.config.ConfigFactory;
 import helpers.VarStore;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
