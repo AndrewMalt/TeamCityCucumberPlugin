@@ -9,3 +9,4 @@ Feature: First test with Cucumber
   Scenario: try to test Hello World One Test
     Given say "<one>"
     And read text
+    And send "False"
