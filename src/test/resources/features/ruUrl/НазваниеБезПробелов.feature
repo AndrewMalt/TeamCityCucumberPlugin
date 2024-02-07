@@ -17,7 +17,7 @@
 
     Примеры:
       | one | boolean |
-      | one | False   |
+#      | one | False   |
       | one | True    |
       | one | False   |
 
