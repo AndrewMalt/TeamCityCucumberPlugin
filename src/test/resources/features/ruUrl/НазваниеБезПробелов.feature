@@ -5,8 +5,19 @@
   Предыстория: пред условия
 #    Given say "zero"
 
-#  Scenario: try to test Hello World
   Сценарий: проверить отображение символов
     Пусть say "<one>"
     И read text
-    И send "False"
+    И send "<boolean>"
+#  Scenario: try to test Hello World
+  Структура сценария: проверить отображение символов
+    Пусть say "<one>"
+    И read text
+    И send "<boolean>"
+
+    Примеры:
+      | one | boolean |
+      | one | False   |
+      | one | True    |
+      | one | False   |
+
